@@ -42,6 +42,7 @@ export const Register = async (req, res) => {
     }
 };
 
+
 export const Login =  async(req,res) =>{
     try {
         const {email, password} =  req.body;
@@ -51,6 +52,7 @@ export const Login =  async(req,res) =>{
                 success: false
             });
         }
+        
         const user = await  User.findOne({email});
         if(!user){
             return res.status(401).json({
@@ -60,6 +62,7 @@ export const Login =  async(req,res) =>{
         }
 
         const isMatch = await bcryptjs.compare( password,user.password  );
+        
         if(!isMatch){
             return res.status(401).json({
                 message:"Incorrent email or password",
@@ -76,9 +79,10 @@ export const Login =  async(req,res) =>{
             success:true
         })
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 }
+
 
 export const logout = (req, res) => {
     return res.cookie("token", "", { expiresIn: new Date(Date.now()) }).json({
